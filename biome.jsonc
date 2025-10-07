@@ -1,0 +1,30 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"extends": ["ultracite"],
+	"javascript": {
+		"formatter": {
+			"semicolons": "asNeeded",
+			"quoteStyle": "single"
+		},
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		}
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				"noParameterProperties": "off",
+				"useConsistentMemberAccessibility": "off",
+				"useImportType": "off",
+				"useReadonlyClassProperties": "off",
+				"noMagicNumbers": "off"
+			},
+			"complexity": {
+				"noStaticOnlyClass": "off"
+			},
+			"nursery": {
+				"useConsistentTypeDefinitions": "off"
+			}
+		}
+	}
+}
