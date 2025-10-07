@@ -18,6 +18,30 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 ---
 
+## 📅 Últimas Atualizações
+
+Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
+
+### 07/10/2025 - Configuração de CI/CD Finalizada!
+
+* ✅ **Deploy Finalizado:** A aplicação está rodando no ambiente de produção dentro da plataforma Fly.io.
+* ✅ **DB em Produção:** Sucesso na conexão e configuração do banco de dados na plataforma Neon (PostgreSQL).
+* ✅ **Migrações Automáticas:** Configuração do `release_command` no arquivo `fly.toml` para garantir que `npx prisma migrate deploy` seja executado a cada novo deploy, sincronizando o DB antes de a API entrar no ar.
+* 🛠️ **Ajustes no Docker:** Correção da ordem dos comandos no `Dockerfile` e adição do `COPY --from=builder /app/node_modules/.prisma` para garantir que os artefatos gerados do Prisma Client estejam presentes no container de produção.
+
+### 06/10/2025 - Função de Registro/Cadastro (MVP)
+
+* ✅ **Casos de Uso:** Finalização do `RegisterUserUseCase` (Cadastro).
+* ✅ **Segurança:** Implementação do **BCrypt** para hashing de senhas.
+* ✅ **Persistência:** Implementação do `PrismaUsersRepository`.
+* ✅ **Testes Unitários e E2E:** Cobertura de testes de ponta a ponta para a rota `/accounts` e unitários para o `RegisterUserUseCase`.
+
+### 06/10/2025 - Setup do Projeto
+
+* ✅ **Estrutura:** Configuração inicial da Clean Architecture (Domínio, Aplicação, Infraestrutura).
+* ✅ **Tecnologias:** Setup inicial com Fastify, TypeScript, Prisma e Vitest.
+---
+
 ## ✅ Status Atual do Projeto (MVP de Autenticação)
 
 O fluxo de **Cadastro de Usuário** está completo e funcional, incluindo:
