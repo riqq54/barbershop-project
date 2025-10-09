@@ -1,6 +1,9 @@
 import fastifyCors from '@fastify/cors'
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 import fastify from 'fastify'
 import {
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
   type ZodTypeProvider,
@@ -11,6 +14,40 @@ const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.register(fastifyCors, {
   origin: '*',
+})
+
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'Barbershop Project API',
+      description: 'Barbershop Management API',
+      version: '1.0.0',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3333',
+        description: 'Development Environment',
+      },
+      {
+        url: 'https://barbershop-project.fly.dev/',
+        description: 'Production URL',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+
+app.register(fastifySwaggerUi, {
+  routePrefix: 'docs',
 })
 
 app.setSerializerCompiler(serializerCompiler)
