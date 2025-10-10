@@ -10,6 +10,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import { env } from './env/env.ts'
+import { privateRoutes } from './http/private-routes.ts'
 import { publicRoutes } from './http/public-routes.ts'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
@@ -60,5 +61,6 @@ app.register(fastifyJwt, {
 })
 
 app.register(publicRoutes)
+app.register(privateRoutes)
 
 export { app }

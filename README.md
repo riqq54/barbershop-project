@@ -22,6 +22,13 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 11/10/2025 - Autenticação e Login Implementados
+
+* ✅ **Autenticação Funcional:** Implementação do **Middleware** `verifyJWT` como `preHandler` para para proteger todas as rotas privadas com verificação JWT.
+* 👤 **Perfil de Usuário:** Rota `GET /me` concluída, permitindo que o Front-End valide o token e obtenha os dados do usuário autenticado.
+* 🧱 **Padrões:** Uso do **`UserProfilePresenter`** para mapear entidades internas para o contrato de resposta HTTP.
+* 🧪 **Qualidade:** Cobertura de testes E2E para o fluxo completo de obtenção do perfil com token.
+
 ### 10/10/2025 - Autenticação e Login Implementados
 
 * ✅ **Login Funcional:** Implementação completa da rota `/sessions` para autenticação de usuários.
@@ -62,7 +69,8 @@ O fluxo de **Cadastro de Usuário** está completo e funcional, incluindo:
 | Endpoint | Método | Descrição | Status |
 | :--- | :--- | :--- | :--- |
 | `/accounts` | `POST` | Cadastro de novos usuários (Role: CLIENT padrão). | **CONCLUÍDO** |
-| `/sessions` | `POST` | Autenticação de usuário e retorno do token JWT. | Em Desenvolvimento |
+| `/sessions` | `POST` | Autenticação de usuário e retorno do token JWT. | **CONCLUÍDO** |
+| `/me` | `GET` | Retorna o perfil do usuário autenticado (requer JWT). | **CONCLUÍDO** |
 
 ---
 
