@@ -22,6 +22,13 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 10/10/2025 - Autenticação e Login Implementados
+
+* ✅ **Login Funcional:** Implementação completa da rota `/sessions` para autenticação de usuários.
+* 🔐 **Segurança Reforçada:** Uso do **BCrypt** para comparação de senhas (`HashComparer`) e geração de **Tokens JWT** para acesso (`@fastify/jwt`).
+* 🧱 **Arquitetura Limpa:** Lógica de autenticação isolada no `AuthenticateUserUseCase` e geração de token no Controller.
+* 🧪 **Qualidade:** Testes unitários e testes E2E para o fluxo de Login.
+
 ### 07/10/2025 - Configuração de CI/CD Finalizada!
 
 * ✅ **Deploy Finalizado:** A aplicação está rodando no ambiente de produção dentro da plataforma Fly.io.
