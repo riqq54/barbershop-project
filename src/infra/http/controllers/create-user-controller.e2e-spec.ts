@@ -1,8 +1,9 @@
 import request from 'supertest'
 import { app } from '@/infra/app.ts'
 import { prisma } from '@/infra/database/prisma/prisma.ts'
+import { createAndAuthenticateUser } from '@/test/utils/create-and-authenticate-user.ts'
 
-describe('Registe user (E2E)', () => {
+describe('Create user (E2E)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -11,13 +12,16 @@ describe('Registe user (E2E)', () => {
     await app.close()
   })
 
-  test('[POST] /accounts', async () => {
+  test('[POST] /users', async () => {
+    const { access_token } = await createAndAuthenticateUser(app, 'MANAGER')
+
     const response = await request(app.server)
-      .post('/accounts')
-      .set('Content-Type', 'application/json')
+      .post('/users')
+      .set('Authorization', `Bearer ${access_token}`)
       .send({
-        name: 'John Doe',
-        login: 'john.doe',
+        name: 'Test User',
+        login: 'test.user',
+        role: 'BARBER',
         password: '123456',
       })
 
@@ -25,7 +29,7 @@ describe('Registe user (E2E)', () => {
 
     const userOnDatabase = await prisma.user.findUnique({
       where: {
-        login: 'john.doe',
+        login: 'test.user',
       },
     })
 

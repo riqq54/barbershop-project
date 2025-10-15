@@ -22,6 +22,14 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 14/10/2025 - Implementação de RBAC e Gerenciamento de Usuários
+
+* ✅ **Controle de Acesso (RBAC):** Adicionado `role` ao *payload* do Token JWT e implementação do *middleware* `verifyUserRole` para autorização baseada em função. Responsabilidade de autorização delegada para a camada de Infraestrutura.
+* ✅ **Rotas Protegidas:** Rota `POST /users` configurada para exigir autorização da `role: MANAGER` via `preHandler`.
+* 🔄 **Refatoração do Registro:**
+    * `RegisterUserUseCase` renomeado para **`RegisterClientUseCase`**.
+    * Novo **`CreateUserUseCase`** criado para permitir que Managers cadastrem outros usuários.
+
 ### 11/10/2025 - Autenticação e Login Implementados
 
 * ✅ **Autenticação Funcional:** Implementação do **Middleware** `verifyJWT` como `preHandler` para para proteger todas as rotas privadas com verificação JWT.
@@ -46,10 +54,10 @@ Este log documenta o progresso das funcionalidades e da infraestrutura do projet
 
 ### 06/10/2025 - Função de Registro/Cadastro (MVP)
 
-* ✅ **Casos de Uso:** Finalização do `RegisterUserUseCase` (Cadastro).
+* ✅ **Casos de Uso:** Finalização do `RegisterClientUseCase` (Cadastro).
 * ✅ **Segurança:** Implementação do **BCrypt** para hashing de senhas.
 * ✅ **Persistência:** Implementação do `PrismaUsersRepository`.
-* ✅ **Testes Unitários e E2E:** Cobertura de testes de ponta a ponta para a rota `/accounts` e unitários para o `RegisterUserUseCase`.
+* ✅ **Testes Unitários e E2E:** Cobertura de testes de ponta a ponta para a rota `/accounts` e unitários para o `RegisterClientUseCase`.
 
 ### 06/10/2025 - Setup do Projeto
 
@@ -159,7 +167,7 @@ npm run test:e2e
 sequenceDiagram
     participant CLI as Cliente (HTTP)
     participant C as Controller (Fastify)
-    participant UC as Use Case (RegisterUser)
+    participant UC as Use Case (RegisterClient)
     participant H as Hasher (BCrypt)
     participant R as Repository (Prisma)
     participant DB as Banco de Dados (PostgreSQL)

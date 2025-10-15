@@ -4,7 +4,7 @@ import { app } from '@/infra/app.ts'
 import { prisma } from '@/infra/database/prisma/prisma.ts'
 import { UserFactory } from '@/test/factories/make-user.ts'
 
-describe('Authenticate Sessino (E2E)', () => {
+describe('Authenticate Session (E2E)', () => {
   let userFactory: UserFactory
 
   beforeAll(async () => {

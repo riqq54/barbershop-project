@@ -2,10 +2,10 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 import { UserAlreadyExistsError } from '@/app/use-cases/errors/user-already-exists-error.ts'
-import { makeRegisterUserUseCase } from './factories/make-register-user-use-case.ts'
+import { makeRegisterClientUseCase } from './factories/make-register-client-use-case.ts'
 
-export const registerUserController: FastifyPluginAsyncZod = async (app) => {
-  const registerUserUseCase = makeRegisterUserUseCase()
+export const registerClientController: FastifyPluginAsyncZod = async (app) => {
+  const registerClientUseCase = makeRegisterClientUseCase()
 
   app.post(
     '/accounts',
@@ -35,10 +35,9 @@ export const registerUserController: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { name, login, password } = request.body
 
-      const result = await registerUserUseCase.execute({
+      const result = await registerClientUseCase.execute({
         name,
         login,
-        role: 'CLIENT',
         password,
       })
 

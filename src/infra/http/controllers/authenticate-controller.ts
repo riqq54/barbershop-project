@@ -62,7 +62,9 @@ export const authenticateController: FastifyPluginAsyncZod = async (app) => {
       const { user } = result.value
 
       const accessToken = await reply.jwtSign(
-        {},
+        {
+          role: user.role,
+        },
         {
           sign: {
             expiresIn: '10m',

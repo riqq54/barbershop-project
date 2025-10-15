@@ -4,19 +4,16 @@ import { User, UserRole } from '../entities/user.ts'
 import type { UsersRepository } from '../repositories/users-repository.ts'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error.ts'
 
-interface RegisterUserUseCaseRequest {
+interface CreateUserUseCaseRequest {
   name: string
   login: string
   password: string
   role: UserRole
 }
 
-type RegisterUserUseCaseResponse = Either<
-  UserAlreadyExistsError,
-  { user: User }
->
+type CreateUserUseCaseResponse = Either<UserAlreadyExistsError, { user: User }>
 
-export class RegisterUserUseCase {
+export class CreateUserUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private hashGenerator: HashGenerator
@@ -27,10 +24,10 @@ export class RegisterUserUseCase {
     login,
     role,
     password,
-  }: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
-    const userWithSameEmail = await this.usersRepository.findByLogin(login)
+  }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+    const userWithSameLogin = await this.usersRepository.findByLogin(login)
 
-    if (userWithSameEmail) {
+    if (userWithSameLogin) {
       return left(new UserAlreadyExistsError(login))
     }
 

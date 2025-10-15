@@ -12,7 +12,7 @@ describe('Get profile (E2E)', () => {
   })
 
   test('[GET] /me', async () => {
-    const { access_token } = await createAndAuthenticateUser(app)
+    const { access_token } = await createAndAuthenticateUser(app, 'CLIENT')
 
     const response = await request(app.server)
       .get('/me')
