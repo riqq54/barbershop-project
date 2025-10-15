@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import { User } from '@/app/entities/user.ts'
-import { UsersRepository } from '@/app/repositories/users-repository.ts'
+import { PaginationParams } from '@/app/repositories/pagination-params.ts'
+import {
+  FindManyUsersQueryParams,
+  UsersRepository,
+} from '@/app/repositories/users-repository.ts'
 import { PrismaUsersMapper } from '../mappers/prisma-users-mapper.ts'
 
 export class PrismaUsersRepository implements UsersRepository {
@@ -32,6 +36,43 @@ export class PrismaUsersRepository implements UsersRepository {
     }
 
     return PrismaUsersMapper.toDomain(user)
+  }
+
+  async findMany(
+    { page }: PaginationParams,
+    queryParams?: FindManyUsersQueryParams
+  ): Promise<{ users: User[]; totalCount: number }> {
+    const users = await this.prisma.user.findMany({
+      where: {
+        role: queryParams?.role,
+        OR: [
+          {
+            name: { contains: queryParams?.q, mode: 'insensitive' },
+          },
+          {
+            login: { contains: queryParams?.q, mode: 'insensitive' },
+          },
+        ],
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    const totalCount = await this.prisma.user.count({
+      where: {
+        role: queryParams?.role,
+        OR: [
+          {
+            name: { contains: queryParams?.q, mode: 'insensitive' },
+          },
+          {
+            login: { contains: queryParams?.q, mode: 'insensitive' },
+          },
+        ],
+      },
+    })
+
+    return { users: users.map(PrismaUsersMapper.toDomain), totalCount }
   }
 
   async create(user: User): Promise<void> {
