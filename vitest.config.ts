@@ -1,7 +1,8 @@
+import { loadEnv } from 'vite'
 import tsConfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   test: {
     dir: 'src',
     globals: true,
@@ -28,6 +29,7 @@ export default defineConfig({
         },
       },
     ],
+    env: loadEnv(mode, process.cwd(), ''),
   },
   plugins: [tsConfigPaths()],
-})
+}))

@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify'
+import { createServiceController } from './controllers/create-service-controller.ts'
 import { createUserController } from './controllers/create-user-controller.ts'
 import { fetchUsersProfileController } from './controllers/fetch-users-controller.ts'
 import { getUserProfileController } from './controllers/get-user-profile-controller.ts'
@@ -10,4 +11,5 @@ export async function privateRoutes(app: FastifyInstance) {
   app.register(getUserProfileController)
   app.register(createUserController)
   app.register(fetchUsersProfileController)
+  app.register(createServiceController)
 }
