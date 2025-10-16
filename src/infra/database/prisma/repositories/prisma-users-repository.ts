@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { User } from '@/app/entities/user.ts'
 import { PaginationParams } from '@/app/repositories/pagination-params.ts'
 import {
@@ -42,34 +42,31 @@ export class PrismaUsersRepository implements UsersRepository {
     { page }: PaginationParams,
     queryParams?: FindManyUsersQueryParams
   ): Promise<{ users: User[]; totalCount: number }> {
+    const whereObject: Prisma.UserWhereInput = {}
+
+    if (queryParams?.role) {
+      whereObject.role = queryParams.role
+    }
+
+    if (queryParams?.q) {
+      whereObject.OR = [
+        {
+          name: { contains: queryParams?.q, mode: 'insensitive' },
+        },
+        {
+          login: { contains: queryParams?.q, mode: 'insensitive' },
+        },
+      ]
+    }
+
     const users = await this.prisma.user.findMany({
-      where: {
-        role: queryParams?.role,
-        OR: [
-          {
-            name: { contains: queryParams?.q, mode: 'insensitive' },
-          },
-          {
-            login: { contains: queryParams?.q, mode: 'insensitive' },
-          },
-        ],
-      },
+      where: whereObject,
       take: 20,
       skip: (page - 1) * 20,
     })
 
     const totalCount = await this.prisma.user.count({
-      where: {
-        role: queryParams?.role,
-        OR: [
-          {
-            name: { contains: queryParams?.q, mode: 'insensitive' },
-          },
-          {
-            login: { contains: queryParams?.q, mode: 'insensitive' },
-          },
-        ],
-      },
+      where: whereObject,
     })
 
     return { users: users.map(PrismaUsersMapper.toDomain), totalCount }

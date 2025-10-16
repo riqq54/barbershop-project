@@ -17,12 +17,14 @@ export const fetchUsersProfileController: FastifyPluginAsyncZod = async (
   app.get(
     '/users',
     {
+      preHandler: [verifyUserRole('MANAGER')],
       schema: {
-        // tags: ['auth'],
-        preHandler: [verifyUserRole('MANAGER')],
         security: [{ bearerAuth: [] }],
         querystring: z.object({
-          name: z.string().optional(),
+          q: z
+            .string()
+            .optional()
+            .describe('use to filter by login or name (contains)'),
           role: z.enum(['MANAGER', 'BARBER', 'CLIENT']).optional(),
           page: z.coerce.number().optional().default(1),
         }),
@@ -37,12 +39,12 @@ export const fetchUsersProfileController: FastifyPluginAsyncZod = async (
       },
     },
     async (request, reply) => {
-      const { page, name, role } = request.query
+      const { page, q, role } = request.query
 
       const result = await fetchUsersProfileUseCase.execute({
         page,
         queryParams: {
-          q: name,
+          q,
           role,
         },
       })

@@ -22,13 +22,13 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
-### 14/10/2025 - Implementação de RBAC e Gerenciamento de Usuários
+### 14/10/2025 - Implementação de RBAC, Gerenciamento e Listagem de Usuários
 
 * ✅ **Controle de Acesso (RBAC):** Adicionado `role` ao *payload* do Token JWT e implementação do *middleware* `verifyUserRole` para autorização baseada em função. Responsabilidade de autorização delegada para a camada de Infraestrutura.
-* ✅ **Rotas Protegidas:** Rota `POST /users` configurada para exigir autorização da `role: MANAGER` via `preHandler`.
+* ✅ **Criação de Usuários (Post Users):** Implementação da rota `POST /users` configurada para exigir autorização da `role: MANAGER` via `preHandler`.
+* ✅ **Listagem de Usuários (Fetch Users):** Implementação da rota `GET /users` com filtros por `role`, busca genérica que verifica nome e login (`q`) e paginação, exigir autorização da `role: MANAGER` via `preHandler`.
 * 🔄 **Refatoração do Registro:**
     * `RegisterUserUseCase` renomeado para **`RegisterClientUseCase`**.
-    * Novo **`CreateUserUseCase`** criado para permitir que Managers cadastrem outros usuários.
 
 ### 11/10/2025 - Autenticação e Login Implementados
 
@@ -63,6 +63,29 @@ Este log documenta o progresso das funcionalidades e da infraestrutura do projet
 
 * ✅ **Estrutura:** Configuração inicial da Clean Architecture (Domínio, Aplicação, Infraestrutura).
 * ✅ **Tecnologias:** Setup inicial com Fastify, TypeScript, Prisma e Vitest.
+---
+
+## 🛠️ Próximos Módulos e Visão de Futuro
+
+O foco principal do projeto passa a ser a implementação do sistema de Agendamento, que será construído sobre o novo **Módulo de Catálogo**.
+
+### 1. Módulo de Catálogo (Serviços e Produtos)
+O **MANAGER** terá acesso completo (CRUD) para gerenciar o catálogo.
+
+| Item | Entidade | Descrição |
+| :--- | :--- | :--- |
+| **Serviços** | `Service` | Itens agendáveis com `valueInCents` e, crucialmente, **`durationInMinutes`**. |
+| **Produtos** | `Product` | Itens de venda (como bebidas/cosméticos) com `valueInCents` e `stock` opcional. |
+
+### 2. Módulo de Agendamento
+O workflow de agendamento é o coração do sistema, focado em evitar conflitos de horário.
+
+| Etapa | Acesso | Descrição |
+| :--- | :--- | :--- |
+| **Disponibilidade** | `CLIENT` / `BARBER` | O sistema deve calcular os *slots* disponíveis para um `Barber` em uma `Date`, subtraindo os horários já reservados com base na `Service.durationInMinutes`. |
+| **Agendamento** | `CLIENT` / `BARBER` | Criação de uma entidade `Appointment` no *slot* escolhido, garantindo a atomicidade e a ausência de conflitos. |
+| **Conclusão** | `BARBER` | O Barbeiro move o `Appointment` para o *status* `COMPLETED` (substituindo o antigo "registro de atendimento"), registrando possíveis gorjetas. |
+
 ---
 
 ## ✅ Status Atual do Projeto (MVP de Autenticação)
@@ -207,6 +230,51 @@ sequenceDiagram
     end
 ```
 
+## Teste de fluxograma
+
+| Etapa | Camada | Agrupamento | Artefato Principal | Ações Chave |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | **Domínio** | - | **Entidade** (`Service.ts`) | Definir a estrutura e as regras de negócio intrínsecas ao objeto (ex: `Service.create({ name, value })`). |
+| **2** | **Aplicação** | Contrato | **Contrato de Repositório** (`ServicesRepository.ts`) | Criar a **interface** (o "Contrato") para a persistência (ex: `save(service: Service)`). A regra de negócio não sabe *como* salvar, apenas *o que* salvar. |
+| **3** | **Aplicação** | Fluxo | **Caso de Uso** (`CreateServiceUseCase.ts`) | Implementar a **lógica do fluxo da aplicação** (ex: 1. Valida nome único; 2. Cria Entidade; 3. Chama Repositório; 4. Retorna sucesso/erro). |
+| **4** | **Testes** | Aplicação | **Unitários** (`.spec.ts`) | Validar o **Caso de Uso** (Etapa 3) e o **Repositório** (Etapa 5) isoladamente, usando *mocks* para dependências. |
+| **5** | **Infraestrutura** | Persistência | **Implementação do Repositório** (`PrismaServicesRepository.ts`) | Implementar o contrato da Etapa 2. É onde ocorre a tradução entre a Entidade do Domínio e a modelagem do Prisma (`Mapper`). |
+| **6** | **Infraestrutura** | Interface | **Controller** (`CreateServiceController.ts`) | Expor a rota Fastify. Recebe HTTP, valida com Zod, chama o Caso de Uso (Etapa 3) e envia a resposta HTTP. |
+| **7** | **Testes** | Fluxo Completo | **E2E** (`.e2e-spec.ts`) | Testar o fluxo completo do cliente, do envio da requisição HTTP (Controller) à persistência no Banco de Dados. |
+
+```mermaid 
+graph TD
+    A[Início: Nova Funcionalidade] --> B(1. Domínio: Entidades e Agregados);
+    
+    subgraph Camada de Aplicação App
+        B --> C(2. Repositório: Contrato Interface);
+        C --> D(3. Use Case: Regra de Negócio/Fluxo);
+        D --> G(4. Testes Unitários: Validar Use Case e Mocks);
+    end
+
+    subgraph Camada de Infraestrutura Infra
+        G --> E(5. Persistência: Implementação do Repositório - Prisma);
+        E --> F(6. Interface: Controller e Rotas - Fastify);
+    end
+    
+    F --> H(7. Testes E2E: Validar Fluxo Completo - Controller);
+    H --> I[Fim: Feature Implementada];
+    
+    style A fill:#E8F5E9,stroke:#4CAF50,color:#333;
+    style I fill:#E8F5E9,stroke:#4CAF50,color:#333;
+    
+    style B fill:#BBDEFB,stroke:#2196F3,color:#333;
+    
+    style C fill:#FFE0B2,stroke:#FF9800,color:#333;
+    style D fill:#FFE0B2,stroke:#FF9800,color:#333;
+    
+    style G fill:#F0F4C3,stroke:#CDDC39,color:#333;
+    
+    style E fill:#CFD8DC,stroke:#607D8B,color:#333;
+    style F fill:#CFD8DC,stroke:#607D8B,color:#333;
+    
+    style H fill:#F0F4C3,stroke:#CDDC39,color:#333;
+```
 ---
 
 ## 💻 Desenvolvido por:
