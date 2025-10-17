@@ -7,12 +7,10 @@ import {
   UserProfilePresenter,
   UserProfilePresenterSchema,
 } from '../presenters/user-profile-presenter.ts'
-import { makeFetchUsersUseCase } from './factories/make-fetch-users.ts'
+import { makeFetchUsersUseCase } from './factories/make-fetch-users-use-case.ts'
 
-export const fetchUsersProfileController: FastifyPluginAsyncZod = async (
-  app
-) => {
-  const fetchUsersProfileUseCase = makeFetchUsersUseCase()
+export const fetchUsersController: FastifyPluginAsyncZod = async (app) => {
+  const fetchUsersUseCase = makeFetchUsersUseCase()
 
   app.get(
     '/users',
@@ -41,7 +39,7 @@ export const fetchUsersProfileController: FastifyPluginAsyncZod = async (
     async (request, reply) => {
       const { page, q, role } = request.query
 
-      const result = await fetchUsersProfileUseCase.execute({
+      const result = await fetchUsersUseCase.execute({
         page,
         queryParams: {
           q,
