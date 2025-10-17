@@ -11,5 +11,6 @@ export interface ServicesRepository {
     params: PaginationParams,
     queryParams?: FindManyServicesQueryParams
   ): Promise<{ services: Service[]; totalCount: number }>
+  save(service: Service): Promise<null>
   create(service: Service): Promise<void>
 }

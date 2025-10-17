@@ -48,7 +48,7 @@ export const fetchUsersController: FastifyPluginAsyncZod = async (app) => {
       })
 
       if (result.isLeft()) {
-        return reply.status(200).send({ users: [], totalCount: 0 })
+        throw new Error('fetchUsersUseCase returned left')
       }
 
       const { users, totalCount } = result.value

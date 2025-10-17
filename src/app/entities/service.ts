@@ -62,6 +62,10 @@ export class Service extends Entity<ServiceProps> {
   }
 
   inactivate() {
+    if (this.props.deletedAt) {
+      return
+    }
+
     this.props.deletedAt = new Date()
     this.touch()
   }
