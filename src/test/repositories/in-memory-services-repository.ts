@@ -8,4 +8,14 @@ export class InMemoryServicesRepository implements ServicesRepository {
   async create(service: Service): Promise<void> {
     this.items.push(service)
   }
+
+  async findById(id: string): Promise<null | Service> {
+    const service = this.items.find((item) => item.id.toString() === id)
+
+    if (!service) {
+      return null
+    }
+
+    return service
+  }
 }
