@@ -1,6 +1,8 @@
+/** biome-ignore-all lint/suspicious/useAwait: fastify plugin */
 import { FastifyInstance } from 'fastify'
 import { createServiceController } from './controllers/create-service-controller.ts'
 import { createUserController } from './controllers/create-user-controller.ts'
+import { deleteServiceController } from './controllers/delete-service-controller.ts'
 import { fetchServicesController } from './controllers/fetch-services-controller.ts'
 import { fetchUsersController } from './controllers/fetch-users-controller.ts'
 import { getServiceByIdController } from './controllers/get-service-by-id-controller.ts'
@@ -16,4 +18,5 @@ export async function privateRoutes(app: FastifyInstance) {
   app.register(createServiceController)
   app.register(getServiceByIdController)
   app.register(fetchServicesController)
+  app.register(deleteServiceController)
 }

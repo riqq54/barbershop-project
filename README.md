@@ -22,6 +22,16 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 17/10/2025 - CRUD Completo para Serviços (Soft Delete, Leitura e Listagem)
+
+* ✅ **Soft Delete (Inativação):** Implementação da rota `DELETE /services/:id`.
+    * **Padrão DDD:** O Use Case (`DeleteServiceUseCase`) delega a Regra de Negócio para a Entidade (`service.inactivate()`) e utiliza o método **`repository.save()`** para persistir o novo estado (com `deletedAt` preenchido).
+    * **HTTP:** Resposta com status `204 No Content` para sucesso.
+* ✅ **Busca por ID:** Implementação da rota `GET /services/:id` com status `200 OK`.
+* ✅ **Listagem e Busca:** Implementação da rota `GET /services` com **paginação** (`page`) e filtro de **busca por nome (`q`)**.
+* 🛡️ **Regra de Negócio (Filtro em Serviços):** O método de leitura (`findMany`) na infraestrutura (Prisma e Mocks) foi ajustado para **filtrar automaticamente** serviços ativos (`deletedAt: null`), garantindo que serviços deletados logicamente não sejam expostos.
+* 🔄 **Refatoração:** O método `save(service)` foi implementado nos repositórios (Mock e Prisma) para ser o único responsável pela atualização de entidades existentes, consolidando a persistência.
+
 ### 16/10/2025 - Implementação do Módulo de Catálogo: Criação de Serviços 
 
 * 🏗️ **Domínio/Entidade:** Criação da Entidade `Service` (`src/app/entities/service.ts`) com `durationInMinutes` e metadados de rastreamento (`updatedAt` e `deletedAt`).

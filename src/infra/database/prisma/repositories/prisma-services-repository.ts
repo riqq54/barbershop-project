@@ -56,4 +56,17 @@ export class PrismaServicesRepository implements ServicesRepository {
 
     return { services: services.map(PrismaServicesMapper.toDomain), totalCount }
   }
+
+  async save(service: Service): Promise<null> {
+    const data = PrismaServicesMapper.toPrisma(service)
+
+    await this.prisma.service.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+
+    return null
+  }
 }
