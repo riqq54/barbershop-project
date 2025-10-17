@@ -11,4 +11,18 @@ export class PrismaServicesRepository implements ServicesRepository {
 
     await this.prisma.service.create({ data })
   }
+
+  async findById(id: string): Promise<null | Service> {
+    const service = await this.prisma.service.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!service) {
+      return null
+    }
+
+    return PrismaServicesMapper.toDomain(service)
+  }
 }
