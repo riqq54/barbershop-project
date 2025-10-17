@@ -11,6 +11,7 @@ export class PrismaServicesMapper {
         durationInMinutes: raw.durationInMinutes,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
+        deletedAt: raw.deletedAt,
       },
       new UniqueEntityID(raw.id)
     )
@@ -25,6 +26,7 @@ export class PrismaServicesMapper {
       durationInMinutes: service.durationInMinutes,
       createdAt: service.createdAt,
       updatedAt: service.updatedAt,
+      deletedAt: service.deletedAt,
     }
   }
 }

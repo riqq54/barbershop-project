@@ -22,6 +22,14 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 16/10/2025 - Implementação do Módulo de Catálogo: Criação de Serviços
+
+* 🏗️ **Domínio/Entidade:** Criação da Entidade `Service` (`src/app/entities/service.ts`) com `durationInMinutes` e metadados de rastreamento (`updatedAt`).
+* 📦 **Aplicação:** Implementação do Contrato (`ServicesRepository`), do Use Case (`CreateServiceUseCase`) e dos **Testes Unitários** correspondentes.
+* 💾 **Infraestrutura (Persistência):** Definição do `Service` Model no Prisma, criação do `PrismaServicesMapper` e do `PrismaServicesRepository` para persistência.
+* 🚀 **Infraestrutura (Interface):** Criação da rota `POST /services` e do `ServicePresenter` para padronizar a resposta HTTP além do **Teste E2E** correspondente.
+* ✅ **Acesso:** Rota protegida por `preHandler` para exigir a `role: MANAGER`.
+
 ### 14/10/2025 - Implementação de RBAC, Gerenciamento e Listagem de Usuários
 
 * ✅ **Controle de Acesso (RBAC):** Adicionado `role` ao *payload* do Token JWT e implementação do *middleware* `verifyUserRole` para autorização baseada em função. Responsabilidade de autorização delegada para a camada de Infraestrutura.

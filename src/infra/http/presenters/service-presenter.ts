@@ -9,6 +9,7 @@ export const ServicePresenterSchema = z.object({
   durationInMinutes: z.number(),
   createdAt: z.date(),
   updatedAt: z.date().optional().nullable(),
+  deletedAt: z.date().optional().nullable(),
 })
 
 type servicePresenterSchema = z.infer<typeof ServicePresenterSchema>
@@ -23,6 +24,7 @@ export class ServicePresenter {
       durationInMinutes: service.durationInMinutes,
       createdAt: service.createdAt,
       updatedAt: service.updatedAt,
+      deletedAt: service.deletedAt,
     }
   }
 }

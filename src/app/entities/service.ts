@@ -9,6 +9,7 @@ export interface ServiceProps {
   durationInMinutes: number
   createdAt: Date
   updatedAt?: Date | null
+  deletedAt?: Date | null
 }
 
 export class Service extends Entity<ServiceProps> {
@@ -56,12 +57,25 @@ export class Service extends Entity<ServiceProps> {
     return this.props.updatedAt
   }
 
+  get deletedAt() {
+    return this.props.deletedAt
+  }
+
+  inactivate() {
+    this.props.deletedAt = new Date()
+    this.touch()
+  }
+
+  get isActive() {
+    return this.props.deletedAt === null
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }
 
   static create(
-    props: Optional<ServiceProps, 'createdAt' | 'description'>,
+    props: Optional<ServiceProps, 'createdAt' | 'description' | 'deletedAt'>,
     id?: UniqueEntityID
   ) {
     const service = new Service(
@@ -69,6 +83,7 @@ export class Service extends Entity<ServiceProps> {
         ...props,
         createdAt: props.createdAt ?? new Date(),
         description: props.description ?? null,
+        deletedAt: props.deletedAt ?? null,
       },
       id
     )
