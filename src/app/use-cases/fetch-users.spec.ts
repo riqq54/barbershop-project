@@ -6,7 +6,7 @@ let inMemoryUsersRepository: InMemoryUsersRepository
 
 let sut: FetchUserUseCase
 
-describe('Get User Profile Use Case', () => {
+describe('Fetch Users Use Case', () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository()
 

@@ -1,6 +1,10 @@
 /** biome-ignore-all lint/suspicious/useAwait: <interface> */
 import { Service } from '@/app/entities/service.ts'
-import { ServicesRepository } from '@/app/repositories/services-repository.ts'
+import { PaginationParams } from '@/app/repositories/pagination-params.ts'
+import {
+  FindManyServicesQueryParams,
+  ServicesRepository,
+} from '@/app/repositories/services-repository.ts'
 
 export class InMemoryServicesRepository implements ServicesRepository {
   public items: Service[] = []
@@ -17,5 +21,25 @@ export class InMemoryServicesRepository implements ServicesRepository {
     }
 
     return service
+  }
+
+  async findMany(
+    { page }: PaginationParams,
+    queryParams?: FindManyServicesQueryParams
+  ): Promise<{ services: Service[]; totalCount: number }> {
+    let filteredItems = this.items.filter((item) => item.deletedAt === null)
+
+    if (queryParams?.q) {
+      const search = queryParams?.q.toLowerCase()
+
+      filteredItems = filteredItems.filter((item) =>
+        item.name.toLowerCase().includes(search)
+      )
+    }
+
+    const totalCount = filteredItems.length
+    const services = filteredItems.slice((page - 1) * 20, page * 20)
+
+    return { services, totalCount }
   }
 }
