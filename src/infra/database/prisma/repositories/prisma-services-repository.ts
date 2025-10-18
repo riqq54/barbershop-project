@@ -49,6 +49,9 @@ export class PrismaServicesRepository implements ServicesRepository {
 
     const services = await this.prisma.service.findMany({
       where: whereObject,
+      include: {
+        servicePrices: true,
+      },
       take: 20,
       skip: (page - 1) * 20,
     })
@@ -61,13 +64,56 @@ export class PrismaServicesRepository implements ServicesRepository {
   }
 
   async save(service: Service): Promise<null> {
-    const data = PrismaServicesMapper.toPrisma(service)
+    const serviceId = service.id.toString()
+    const newServicePrice = service.currentValueInCents
+    const serviceOnlyUpdateData = PrismaServicesMapper.toPrismaUpdate(service)
 
-    await this.prisma.service.update({
-      where: {
-        id: data.id,
-      },
-      data,
+    await this.prisma.$transaction(async (tx) => {
+      const serviceOnDatabase = await tx.service.findUniqueOrThrow({
+        where: {
+          id: serviceId,
+        },
+        include: {
+          servicePrices: {
+            where: {
+              endDate: null,
+            },
+          },
+        },
+      })
+
+      const {
+        valueInCents: servicePriceOnDatabase,
+        id: previousServicePriceId,
+      } = serviceOnDatabase.servicePrices[0]
+
+      await tx.service.update({
+        where: {
+          id: serviceId,
+        },
+        data: serviceOnlyUpdateData,
+      })
+
+      const hasPriceChanged = newServicePrice !== servicePriceOnDatabase
+
+      if (hasPriceChanged) {
+        await tx.servicePrice.update({
+          where: {
+            id: previousServicePriceId,
+          },
+          data: {
+            endDate: new Date(),
+          },
+        })
+
+        await tx.servicePrice.create({
+          data: {
+            serviceId,
+            valueInCents: newServicePrice,
+            startDate: new Date(),
+          },
+        })
+      }
     })
 
     return null

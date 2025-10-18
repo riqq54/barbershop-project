@@ -44,4 +44,14 @@ export class PrismaServicesMapper {
       },
     }
   }
+
+  static toPrismaUpdate(service: Service): Prisma.ServiceUpdateInput {
+    return {
+      name: service.name,
+      description: service.description,
+      durationInMinutes: service.durationInMinutes,
+      updatedAt: service.updatedAt,
+      deletedAt: service.deletedAt,
+    }
+  }
 }

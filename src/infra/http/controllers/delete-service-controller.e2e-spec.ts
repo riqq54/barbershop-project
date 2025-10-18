@@ -13,7 +13,7 @@ describe('Delete service (E2E)', () => {
     await app.close()
   })
 
-  test('[GET] /services/:id', async () => {
+  test('[DELETE] /services/:id', async () => {
     const { access_token } = await createAndAuthenticateUser(app, 'MANAGER')
 
     const serviceFactory = new ServiceFactory(prisma)
