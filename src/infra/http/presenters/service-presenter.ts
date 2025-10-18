@@ -20,7 +20,7 @@ export class ServicePresenter {
       id: service.id.toString(),
       name: service.name,
       description: service.description,
-      valueInCents: service.valueInCents,
+      valueInCents: service.currentValueInCents,
       durationInMinutes: service.durationInMinutes,
       createdAt: service.createdAt,
       updatedAt: service.updatedAt,

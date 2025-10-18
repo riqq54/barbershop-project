@@ -1,5 +1,6 @@
 import { Either, right } from '@/core/either.ts'
 import { Service } from '../entities/service.ts'
+import { ServicePrice } from '../entities/service-price.ts'
 import { ServicesRepository } from '../repositories/services-repository.ts'
 
 interface CreateServiceUseCaseRequest {
@@ -23,9 +24,16 @@ export class CreateServiceUseCase {
     const service = Service.create({
       name,
       description,
-      valueInCents,
+      servicePrices: [],
       durationInMinutes,
     })
+
+    const servicePrice = ServicePrice.create({
+      serviceId: service.id,
+      valueInCents,
+    })
+
+    service.servicePrices.push(servicePrice)
 
     await this.servicesRepository.create(service)
 

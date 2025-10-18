@@ -21,6 +21,9 @@ export class PrismaServicesRepository implements ServicesRepository {
       where: {
         id,
       },
+      include: {
+        servicePrices: true,
+      },
     })
 
     if (!service) {

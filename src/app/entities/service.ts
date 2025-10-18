@@ -1,11 +1,12 @@
 import { Entity } from '@/core/entities/entity.ts'
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id.ts'
 import type { Optional } from '@/core/types/optional.ts'
+import { ServicePrice } from './service-price.ts'
 
 export interface ServiceProps {
   name: string
   description?: string | null
-  valueInCents: number
+  servicePrices: ServicePrice[]
   durationInMinutes: number
   createdAt: Date
   updatedAt?: Date | null
@@ -31,13 +32,12 @@ export class Service extends Entity<ServiceProps> {
     this.touch()
   }
 
-  get valueInCents() {
-    return this.props.valueInCents
+  get servicePrices() {
+    return this.props.servicePrices
   }
 
-  set valueInCents(valueInCents: number) {
-    this.props.valueInCents = valueInCents
-    this.touch()
+  set servicePrices(servicePrices: ServicePrice[]) {
+    this.props.servicePrices = servicePrices
   }
 
   get durationInMinutes() {
@@ -72,6 +72,14 @@ export class Service extends Entity<ServiceProps> {
 
   get isActive() {
     return this.props.deletedAt === null
+  }
+
+  get currentValueInCents() {
+    const currentPrice = this.servicePrices.find(
+      (price) => price.endDate === null
+    )
+
+    return currentPrice ? currentPrice.valueInCents : 0
   }
 
   private touch() {
