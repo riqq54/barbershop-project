@@ -11,7 +11,8 @@ export const registerClientController: FastifyPluginAsyncZod = async (app) => {
     '/accounts',
     {
       schema: {
-        // tags: ['auth'],
+        tags: ['Autenticação & Cadastro'],
+        summary: 'Registra um novo cliente.',
         body: z.object({
           name: z.string(),
           login: z.string(),

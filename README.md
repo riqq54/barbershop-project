@@ -22,6 +22,15 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 18/10/2025 - CRUD Completo: Edição de Serviços com Histórico de Preços (SCD Tipo 2)
+
+* ✅ **Edição de Serviços:** Implementação da rota `PUT /services/:id`.
+* 💰 **SCD Tipo 2 (Preços):** A complexa Regra de Negócio para o histórico de preços foi movida e encapsulada na Entidade `Service` através do método `service.updatePrice(newValueInCents)`.
+    * Se o preço for alterado, o registro de preço **ativo** anterior é marcado com o `endDate` (data de encerramento).
+    * Um **novo** registro de `ServicePrice` é criado com o novo valor, garantindo a rastreabilidade histórica.
+* 💾 **Persistência Limpa:** O método `repository.save()` no `PrismaServicesRepository` foi adaptado para persistir o estado final do agregado, executando os `UPDATE` (encerrando o preço antigo) e o `CREATE` (adicionando o novo preço) dentro de uma única `$transaction` atômica.
+* 🔄 **Conclusão do CRUD:** Finalização do CRUD completo para a entidade `Service`.
+
 ### 17/10/2025 - CRUD Completo para Serviços (Soft Delete, Leitura e Listagem)
 
 * ✅ **Soft Delete (Inativação):** Implementação da rota `DELETE /services/:id`.

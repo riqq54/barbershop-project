@@ -14,6 +14,8 @@ export const deleteServiceController: FastifyPluginAsyncZod = async (app) => {
     {
       preHandler: [verifyUserRole('MANAGER')],
       schema: {
+        tags: ['Gerenciamento de Serviços'],
+        summary: 'Inativa (soft delete) um serviço.',
         security: [{ bearerAuth: [] }],
         params: z.object({
           id: z.uuid(),

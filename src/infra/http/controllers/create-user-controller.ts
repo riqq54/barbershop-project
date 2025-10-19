@@ -17,6 +17,8 @@ export const createUserController: FastifyPluginAsyncZod = async (app) => {
     {
       preHandler: [verifyUserRole('MANAGER')],
       schema: {
+        tags: ['Gerenciamento de Usuários'],
+        summary: 'Cria um novo usuário (MANAGER, BARBER, CLIENT).',
         security: [{ bearerAuth: [] }],
         body: z.object({
           name: z.string(),

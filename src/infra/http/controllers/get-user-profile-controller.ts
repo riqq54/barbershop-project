@@ -16,7 +16,8 @@ export const getUserProfileController: FastifyPluginAsyncZod = async (app) => {
     '/me',
     {
       schema: {
-        // tags: ['auth'],
+        tags: ['Usuário & Perfil'],
+        summary: 'Obtém o perfil do usuário logado.',
         security: [{ bearerAuth: [] }],
         response: {
           200: z

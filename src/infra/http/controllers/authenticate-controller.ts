@@ -12,7 +12,8 @@ export const authenticateController: FastifyPluginAsyncZod = async (app) => {
     '/sessions',
     {
       schema: {
-        tags: ['auth'],
+        tags: ['Autenticação & Cadastro'],
+        summary: 'Autenticação (login) e geração de token.',
         body: z.object({
           login: z.string(),
           password: z.string(),

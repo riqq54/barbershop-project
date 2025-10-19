@@ -16,6 +16,8 @@ export const createServiceController: FastifyPluginAsyncZod = async (app) => {
     {
       preHandler: [verifyUserRole('MANAGER')],
       schema: {
+        tags: ['Gerenciamento de Serviços'],
+        summary: 'Cria um novo serviço no catálogo.',
         security: [{ bearerAuth: [] }],
         body: z.object({
           name: z.string(),

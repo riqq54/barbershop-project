@@ -18,7 +18,8 @@ export const getServiceByIdController: FastifyPluginAsyncZod = async (app) => {
     {
       preHandler: [verifyUserRole('MANAGER')],
       schema: {
-        // tags: ['auth'],
+        tags: ['Gerenciamento de Serviços'],
+        summary: 'Busca um serviço específico por ID.',
         security: [{ bearerAuth: [] }],
         params: z.object({
           id: z.uuid(),

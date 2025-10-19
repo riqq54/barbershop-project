@@ -17,6 +17,8 @@ export const fetchUsersController: FastifyPluginAsyncZod = async (app) => {
     {
       preHandler: [verifyUserRole('MANAGER')],
       schema: {
+        tags: ['Gerenciamento de Usuários'],
+        summary: 'Lista e filtra usuários do sistema.',
         security: [{ bearerAuth: [] }],
         querystring: z.object({
           q: z
