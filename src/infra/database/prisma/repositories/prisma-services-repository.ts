@@ -83,6 +83,28 @@ export class PrismaServicesRepository implements ServicesRepository {
         data: serviceOnlyUpdateData,
       })
 
+      const currentPriceOnDatabase = await tx.servicePrice.findFirstOrThrow({
+        where: {
+          AND: {
+            serviceId,
+            endDate: null,
+          },
+        },
+      })
+
+      if (
+        priceToCreate.length > 0 &&
+        currentPriceOnDatabase.id !== priceToCreate[0].id.toString()
+      ) {
+        await tx.servicePrice.create({
+          data: {
+            serviceId,
+            valueInCents: priceToCreate[0].valueInCents,
+            startDate: priceToCreate[0].startDate,
+          },
+        })
+      }
+
       for (const price of pricesToUpdate) {
         await tx.servicePrice.update({
           where: {
@@ -90,16 +112,6 @@ export class PrismaServicesRepository implements ServicesRepository {
           },
           data: {
             endDate: price.endDate,
-          },
-        })
-      }
-
-      if (priceToCreate.length > 0) {
-        await tx.servicePrice.create({
-          data: {
-            serviceId,
-            valueInCents: priceToCreate[0].valueInCents,
-            startDate: priceToCreate[0].startDate,
           },
         })
       }

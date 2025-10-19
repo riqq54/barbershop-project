@@ -14,9 +14,9 @@ export const registerClientController: FastifyPluginAsyncZod = async (app) => {
         tags: ['Autenticação & Cadastro'],
         summary: 'Registra um novo cliente.',
         body: z.object({
-          name: z.string(),
-          login: z.string(),
-          password: z.string(),
+          name: z.string().nonempty('O nome não pode ser vazio'),
+          login: z.string().nonempty('O login não pode ser vazio'),
+          password: z.string().nonempty('A senha não pode ser vazia'),
         }),
         response: {
           201: z.null().describe('Account created!'),
