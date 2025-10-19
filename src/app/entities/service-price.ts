@@ -26,6 +26,10 @@ export class ServicePrice extends Entity<ServicePriceProps> {
     return this.props.endDate
   }
 
+  set endDate(date) {
+    this.props.endDate = date
+  }
+
   static create(
     props: Optional<ServicePriceProps, 'startDate' | 'endDate'>,
     id?: UniqueEntityID

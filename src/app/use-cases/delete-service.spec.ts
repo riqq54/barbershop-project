@@ -1,6 +1,6 @@
 import { makeService } from '@/test/factories/make-service.ts'
 import { InMemoryServicesRepository } from '@/test/repositories/in-memory-services-repository.ts'
-import { DeleteServiceUseCase } from './delete-service-use-case.ts'
+import { DeleteServiceUseCase } from './delete-service.ts'
 
 let inMemoryServicesRepository: InMemoryServicesRepository
 

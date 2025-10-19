@@ -65,28 +65,17 @@ export class PrismaServicesRepository implements ServicesRepository {
 
   async save(service: Service): Promise<null> {
     const serviceId = service.id.toString()
-    const newServicePrice = service.currentValueInCents
     const serviceOnlyUpdateData = PrismaServicesMapper.toPrismaUpdate(service)
 
+    const pricesToUpdate = service.servicePrices.filter(
+      (price) => price.endDate !== null
+    )
+
+    const priceToCreate = service.servicePrices.filter(
+      (price) => price.endDate === null
+    )
+
     await this.prisma.$transaction(async (tx) => {
-      const serviceOnDatabase = await tx.service.findUniqueOrThrow({
-        where: {
-          id: serviceId,
-        },
-        include: {
-          servicePrices: {
-            where: {
-              endDate: null,
-            },
-          },
-        },
-      })
-
-      const {
-        valueInCents: servicePriceOnDatabase,
-        id: previousServicePriceId,
-      } = serviceOnDatabase.servicePrices[0]
-
       await tx.service.update({
         where: {
           id: serviceId,
@@ -94,23 +83,23 @@ export class PrismaServicesRepository implements ServicesRepository {
         data: serviceOnlyUpdateData,
       })
 
-      const hasPriceChanged = newServicePrice !== servicePriceOnDatabase
-
-      if (hasPriceChanged) {
+      for (const price of pricesToUpdate) {
         await tx.servicePrice.update({
           where: {
-            id: previousServicePriceId,
+            id: price.id.toString(),
           },
           data: {
-            endDate: new Date(),
+            endDate: price.endDate,
           },
         })
+      }
 
+      if (priceToCreate.length > 0) {
         await tx.servicePrice.create({
           data: {
             serviceId,
-            valueInCents: newServicePrice,
-            startDate: new Date(),
+            valueInCents: priceToCreate[0].valueInCents,
+            startDate: priceToCreate[0].startDate,
           },
         })
       }

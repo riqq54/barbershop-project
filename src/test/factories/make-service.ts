@@ -38,7 +38,7 @@ export function makeService(
 export class ServiceFactory {
   constructor(private prisma: PrismaClient) {}
 
-  async makePrismaService(data: Partial<ServiceProps> = {}): Promise<Service> {
+  async makePrismaService(data: MakeServiceOverride = {}): Promise<Service> {
     const service = makeService(data)
 
     await this.prisma.service.create({

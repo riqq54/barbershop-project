@@ -82,6 +82,27 @@ export class Service extends Entity<ServiceProps> {
     return currentPrice ? currentPrice.valueInCents : 0
   }
 
+  updatePrice(newValueInCents: number) {
+    if (this.currentValueInCents === newValueInCents) {
+      return
+    }
+
+    const previousActivePrice = this.props.servicePrices.find(
+      (price) => price.endDate === null
+    )
+
+    if (previousActivePrice) {
+      previousActivePrice.endDate = new Date()
+    }
+
+    const newPrice = ServicePrice.create({
+      serviceId: this.id,
+      valueInCents: newValueInCents,
+    })
+
+    this.props.servicePrices.push(newPrice)
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }
