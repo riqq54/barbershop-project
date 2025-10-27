@@ -271,36 +271,48 @@ sequenceDiagram
 
 ```mermaid 
 graph TD
-    A[Início: Nova Funcionalidade] --> B(1. Domínio: Entidades e Agregados);
-    
-    subgraph Camada de Aplicação App
+    A[Início: Nova Funcionalidade]
+
+    subgraph ZA["Camada de Aplicação App"]
+    direction LR
+
+        B(1. Domínio: Entidades e Agregados);
         B --> C(2. Repositório: Contrato Interface);
         C --> D(3. Use Case: Regra de Negócio/Fluxo);
-        D --> G(4. Testes Unitários: Validar Use Case e Mocks);
+        D --> E(4. Testes Unitários: Validar Use Case e Mocks);
+
     end
 
-    subgraph Camada de Infraestrutura Infra
-        G --> E(5. Persistência: Implementação do Repositório - Prisma);
-        E --> F(6. Interface: Controller e Rotas - Fastify);
+    subgraph ZB["Camada de Infraestrutura"]
+    direction LR
+
+        F(5. Persistência: Implementação do Repositório - Prisma);
+        F --> G(6. Interface: Controller e Rotas - Fastify);
+        G --> H(7. Testes E2E: Validar Fluxo Completo - Controller);
+
     end
-    
-    F --> H(7. Testes E2E: Validar Fluxo Completo - Controller);
-    H --> I[Fim: Feature Implementada];
-    
+
+    A --> ZA
+
+    ZA --> ZB
+
+    I[Fim: Feature Implementada];
+
+    ZB --> I
+
     style A fill:#E8F5E9,stroke:#4CAF50,color:#333;
-    style I fill:#E8F5E9,stroke:#4CAF50,color:#333;
-    
     style B fill:#BBDEFB,stroke:#2196F3,color:#333;
     
     style C fill:#FFE0B2,stroke:#FF9800,color:#333;
     style D fill:#FFE0B2,stroke:#FF9800,color:#333;
     
-    style G fill:#F0F4C3,stroke:#CDDC39,color:#333;
-    
     style E fill:#CFD8DC,stroke:#607D8B,color:#333;
     style F fill:#CFD8DC,stroke:#607D8B,color:#333;
     
+    style G fill:#F0F4C3,stroke:#CDDC39,color:#333;
     style H fill:#F0F4C3,stroke:#CDDC39,color:#333;
+    
+    style I fill:#E8F5E9,stroke:#4CAF50,color:#333;
 ```
 ---
 
