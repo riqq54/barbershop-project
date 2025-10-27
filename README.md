@@ -22,6 +22,16 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 27/10/2025 - Implementação do Módulo de Agendamentos (Appointments)
+
+* 🏗️ **Domínio/Entidade:** Criação da Entidade `Appointment` (`src/app/entities/appointment.ts`) com validação de duração e metadados de rastreamento (`completedAt`, `canceledAt`).
+* 📦 **Aplicação:** Implementação do Contrato (`AppointmentsRepository`), do Use Case (`CreateAppointmentUseCase`) e dos **Testes Unitários** correspondentes.
+    * 🛡️ **Regra de Negócio Crítica:** O Use Case implementa a checagem de sobreposição de horários (overlapping) para garantir que um barbeiro não tenha agendamentos conflitantes.
+    * 🔎 **Integração:** O Use Case utiliza o `ServicesRepository` para obter a `durationInMinutes` do serviço.
+* 🚀 **Infraestrutura (Interface):** Criação da rota `POST /appointments` protegida por autenticação de cliente.
+    * **Presenter:** Implementação do `AppointmentPresenter` para converter objetos `Date` da Entidade em **strings ISO 8601** (padrão web).
+* 🧪 **Qualidade:** **Teste E2E** completo para os cenários de sucesso (`201 Created`) e falha de sobreposição de horário (`409 Conflict`).
+
 ### 18/10/2025 - CRUD Completo: Edição de Serviços com Histórico de Preços (SCD Tipo 2)
 
 * ✅ **Edição de Serviços:** Implementação da rota `PUT /services/:id`.

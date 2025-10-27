@@ -9,6 +9,7 @@ import { fetchUsersController } from './controllers/fetch-users-controller.ts'
 import { getServiceByIdController } from './controllers/get-service-by-id-controller.ts'
 import { getUserProfileController } from './controllers/get-user-profile-controller.ts'
 import { verifyJWT } from './middlewares/verify-jwt.ts'
+import { createAppointmentController } from './controllers/create-appointment-controller.ts'
 
 export async function privateRoutes(app: FastifyInstance) {
   app.addHook('preHandler', verifyJWT)
@@ -21,4 +22,5 @@ export async function privateRoutes(app: FastifyInstance) {
   app.register(fetchServicesController)
   app.register(deleteServiceController)
   app.register(editServiceController)
+  app.register(createAppointmentController)
 }
