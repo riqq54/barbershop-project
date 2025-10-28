@@ -31,24 +31,30 @@ export class Appointment extends Entity<AppointmentProps> {
     return this.props.durationInMinutes
   }
 
-  get startsAt(){
+  get startsAt() {
     return this.props.startsAt
   }
 
-  get completedAt(){
+  get endsAt() {
+    return new Date(
+      this.props.startsAt.getTime() + this.durationInMinutes * 60_000
+    )
+  }
+
+  get completedAt() {
     return this.props.completedAt
   }
 
-  set completedAt(date: Date | null | undefined){
+  set completedAt(date: Date | null | undefined) {
     this.props.completedAt = date
     this.touch()
   }
 
-  get canceledAt(){
+  get canceledAt() {
     return this.props.canceledAt
   }
 
-  set canceledAt(date: Date | null | undefined){
+  set canceledAt(date: Date | null | undefined) {
     this.props.canceledAt = date
     this.touch()
   }
@@ -57,11 +63,11 @@ export class Appointment extends Entity<AppointmentProps> {
     if (this.props.canceledAt) {
       return 'CANCELED'
     }
-    
+
     if (this.props.completedAt) {
       return 'COMPLETED'
     }
-    
+
     return 'SCHEDULED'
   }
 
@@ -78,7 +84,10 @@ export class Appointment extends Entity<AppointmentProps> {
   }
 
   static create(
-    props: Optional<AppointmentProps, 'createdAt' | 'completedAt' | 'canceledAt'>,
+    props: Optional<
+      AppointmentProps,
+      'createdAt' | 'completedAt' | 'canceledAt'
+    >,
     id?: UniqueEntityID
   ) {
     const appointment = new Appointment(

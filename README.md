@@ -22,6 +22,14 @@ Adotamos uma rigorosa separação de responsabilidades (Clean Architecture):
 
 Este log documenta o progresso das funcionalidades e da infraestrutura do projeto:
 
+### 28/10/2025 - Implementação da Busca de Disponibilidade (UX de Agendamento)
+
+* 🔎 **Funcionalidade Central:** Implementação da rota `GET /appointments/available-times` para que o frontend possa consultar dinamicamente os horários livres.
+* 📦 **Use Case:** Criação do `FetchAvailableAppointmentTimesUseCase` (Camada de Aplicação) contendo a lógica complexa de iteração de tempo, checagem de horário de trabalho e conflito com agendamentos existentes.
+* 💾 **Persistência:** Implementação do método `findConfirmedByBarberAndDate` nos repositórios In-Memory e Prisma, garantindo que apenas agendamentos *confirmados* (não cancelados/completos) sejam considerados.
+* 🚀 **Infraestrutura (Interface):** Criação do `FetchAvailableAppointmentTimesController` usando o método `GET` e `querystring` (design RESTful) para facilitar a reatividade no frontend React.
+* 🛡️ **Segurança/Qualidade:** Cobertura completa com **Testes Unitários** para a lógica de tempo e **Teste E2E** validando o fluxo completo da requisição HTTP ao cálculo de disponibilidade no banco.
+
 ### 27/10/2025 - Implementação do Módulo de Agendamentos (Appointments)
 
 * 🏗️ **Domínio/Entidade:** Criação da Entidade `Appointment` (`src/app/entities/appointment.ts`) com validação de duração e metadados de rastreamento (`completedAt`, `canceledAt`).
