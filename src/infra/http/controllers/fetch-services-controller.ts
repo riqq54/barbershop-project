@@ -15,7 +15,7 @@ export const fetchServicesController: FastifyPluginAsyncZod = async (app) => {
   app.get(
     '/services',
     {
-      preHandler: [verifyUserRole(['MANAGER'])],
+      preHandler: [verifyUserRole(['MANAGER', 'BARBER'])],
       schema: {
         tags: ['Gerenciamento de Serviços'],
         summary: 'Lista e filtra serviços disponíveis.',
