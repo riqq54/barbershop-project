@@ -31,6 +31,9 @@ model User {
   BarberAppointments Appointment[] @relation("BarberAppointments")
   ClientAppointments Appointment[] @relation("ClientAppointments")
 
+  BarberProvidedService ProvidedService[] @relation("BarberProvidedService")
+  ClientProvidedService ProvidedService[] @relation("ClientProvidedService")
+
   @@map("users")
 }
 
@@ -44,8 +47,9 @@ model Service {
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  servicePrices ServicePrice[]
-  Appointment   Appointment[]
+  servicePrices    ServicePrice[]
+  Appointment      Appointment[]
+  providedServices ProvidedService[]
 
   @@map("services")
 }
@@ -83,4 +87,18 @@ model Appointment {
 
   @@index([barberId, startsAt])
   @@map("appointments")
+}
+
+model ProvidedService {
+  id        String @id @default(uuid())
+  barberId  String @map("barber_id")
+  clientId  String @map("client_id")
+  serviceId String @map("service_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  barber    User     @relation("BarberProvidedService", fields: [barberId], references: [id])
+  client    User     @relation("ClientProvidedService", fields: [clientId], references: [id])
+  service   Service  @relation(fields: [serviceId], references: [id])
+
+  @@map("provided_services")
 }

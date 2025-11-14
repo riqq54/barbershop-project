@@ -3,11 +3,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { UserRole } from '@/app/entities/user.ts'
 
-export function verifyUserRole(roleToVerify: UserRole) {
+export function verifyUserRole(rolesToVerify: UserRole[]) {
   return async (req: FastifyRequest, res: FastifyReply) => {
     const { role } = req.user
 
-    if (role !== roleToVerify) {
+    if (!rolesToVerify.includes(role)) {
       return res.status(401).send({ message: 'Unauthorized.' })
     }
   }

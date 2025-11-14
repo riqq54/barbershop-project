@@ -337,3 +337,51 @@ graph TD
 ## 💻 Desenvolvido por:
 
 Henrique Freitas de Lima
+
+## teste
+
+```mermaid
+sequenceDiagram
+    actor CLI as Cliente (HTTP)
+    participant C as Controller (Fastify)
+    participant MW as Middleware (verifyUserRole)
+    participant UC as Use Case (FetchUser)
+    participant R as Repository (PrismaUsers)
+    participant DB as Banco de Dados (PostgreSQL)
+
+    CLI->>C: GET /users
+    activate C
+    
+    C->>MW: 1. preHandler: verifyUserRole('MANAGER')
+    activate MW
+    
+    alt Usuário é MANAGER
+        MW-->>C: 2. Autorizado (Segue)
+        deactivate MW
+        
+        C->>UC: 3. execute({ page, queryParams })
+        activate UC
+        
+        UC->>R: 4. findMany({ page }, queryParams)
+        activate R
+        
+        R->>R: 5. Constrói Filtros e Paginação
+        
+        R->>DB: 6. Busca Usuários Paginados
+        activate DB
+        DB-->>R: 7. Retorna usuários filtrados e contagem total de registros
+                
+        R->>R: 10. Mapeia Users (toDomain)
+        R-->>UC: 11. Retorna { users: User[], totalCount }
+        deactivate R
+        
+        UC-->>C: 12. right({ users, totalCount })
+        deactivate UC
+        
+        C->>C: 13. Mapeia Users (UserProfilePresenter.toHTTP)
+        C-->>CLI: 200 OK (Paginated Users + Total Count)
+        deactivate C
+    else Usuário não é MANAGER
+        MW--xCLI: 2. 403 Forbidden (Não Autorizado)
+    end
+```

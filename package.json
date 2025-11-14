@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "tsx watch --env-file .env src/infra/server.ts",
     "build": "tsup",
-    "test": "vitest run --project unit",
-    "test:e2e": "vitest run --project e2e"
+    "test": "vitest run --project unit --coverage",
+    "test:e2e": "vitest run --project e2e --coverage"
   },
   "keywords": [],
   "author": "",
