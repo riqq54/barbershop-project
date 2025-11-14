@@ -9,6 +9,7 @@ export class PrismaProvidedServicesMapper {
       barberId: providedService.barberId.toString(),
       clientId: providedService.clientId.toString(),
       serviceId: providedService.serviceId.toString(),
+      valueInCents: providedService.valueInCents,
       createdAt: providedService.createdAt
     }
   }

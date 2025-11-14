@@ -90,10 +90,11 @@ model Appointment {
 }
 
 model ProvidedService {
-  id        String @id @default(uuid())
-  barberId  String @map("barber_id")
-  clientId  String @map("client_id")
-  serviceId String @map("service_id")
+  id           String @id @default(uuid())
+  barberId     String @map("barber_id")
+  clientId     String @map("client_id")
+  serviceId    String @map("service_id")
+  valueInCents Int    @map("value_in_cents")
 
   createdAt DateTime @default(now()) @map("created_at")
   barber    User     @relation("BarberProvidedService", fields: [barberId], references: [id])
