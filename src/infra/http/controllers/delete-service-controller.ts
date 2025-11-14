@@ -12,7 +12,7 @@ export const deleteServiceController: FastifyPluginAsyncZod = async (app) => {
   app.delete(
     '/services/:id',
     {
-      preHandler: [verifyUserRole('MANAGER')],
+      preHandler: [verifyUserRole(['MANAGER'])],
       schema: {
         tags: ['Gerenciamento de Serviços'],
         summary: 'Inativa (soft delete) um serviço.',

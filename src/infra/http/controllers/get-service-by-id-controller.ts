@@ -16,7 +16,7 @@ export const getServiceByIdController: FastifyPluginAsyncZod = async (app) => {
   app.get(
     '/services/:id',
     {
-      preHandler: [verifyUserRole('MANAGER')],
+      preHandler: [verifyUserRole(['MANAGER'])],
       schema: {
         tags: ['Gerenciamento de Serviços'],
         summary: 'Busca um serviço específico por ID.',

@@ -15,7 +15,7 @@ export const editServiceController: FastifyPluginAsyncZod = async (app) => {
   app.put(
     '/services/:id',
     {
-      preHandler: [verifyUserRole('MANAGER')],
+      preHandler: [verifyUserRole(['MANAGER'])],
       schema: {
         tags: ['Gerenciamento de Serviços'],
         summary: 'Edita os dados de serviço existente.',

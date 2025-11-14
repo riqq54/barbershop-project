@@ -15,7 +15,7 @@ export const createUserController: FastifyPluginAsyncZod = async (app) => {
   app.post(
     '/users',
     {
-      preHandler: [verifyUserRole('MANAGER')],
+      preHandler: [verifyUserRole(['MANAGER'])],
       schema: {
         tags: ['Gerenciamento de Usuários'],
         summary: 'Cria um novo usuário (MANAGER, BARBER, CLIENT).',
