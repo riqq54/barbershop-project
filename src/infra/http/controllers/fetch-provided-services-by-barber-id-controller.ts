@@ -9,7 +9,7 @@ import {
 } from '../presenters/provided-service-details-presenter.ts'
 import { makeFetchProvidedServicesByBarberIdUseCase } from './factories/make-fetch-provided-services-by-barber-id.ts'
 
-export const FetchProvidedServicesByBarberIdController: FastifyPluginAsyncZod =
+export const fetchProvidedServicesByBarberIdController: FastifyPluginAsyncZod =
   async (app) => {
     const fetchProvidedServicesByBarberIdUseCase =
       makeFetchProvidedServicesByBarberIdUseCase()

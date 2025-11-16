@@ -95,4 +95,37 @@ export class InMemoryProvidedServicesRepository
 
     return { providedServices, totalCount }
   }
+
+  async findManyOnCurrentMonth(): Promise<ProvidedService[]> {
+    const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth()
+
+    const currentMonthItems = this.items.filter((item) => {
+      const isSameYear = item.createdAt.getFullYear() === currentYear
+      const isSameMonth = item.createdAt.getMonth() === currentMonth
+
+      return isSameYear && isSameMonth
+    })
+
+    return currentMonthItems
+  }
+
+  async findManyOnLastMonth(): Promise<ProvidedService[]> {
+    const now = new Date()
+    const lastMonthRef = new Date(now)
+    lastMonthRef.setMonth(now.getMonth() - 1)
+
+    const lastMonthYear = lastMonthRef.getFullYear()
+    const lastMonthMonth = lastMonthRef.getMonth()
+
+    const lastMonthItems = this.items.filter((item) => {
+      const isSameYear = item.createdAt.getFullYear() === lastMonthYear
+      const isSameMonth = item.createdAt.getMonth() === lastMonthMonth
+
+      return isSameYear && isSameMonth
+    })
+
+    return lastMonthItems
+  }
 }

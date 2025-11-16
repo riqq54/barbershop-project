@@ -13,4 +13,6 @@ export interface ProvidedServicesRepository {
     params: PaginationParams,
     queryParams?: FindManyProvidedServicesDetailsByBarberIdQueryParams
   ): Promise<{ providedServices: ProvidedServiceDetails[]; totalCount: number }>
+  findManyOnCurrentMonth(): Promise<ProvidedService[]>
+  findManyOnLastMonth(): Promise<ProvidedService[]>
 }
