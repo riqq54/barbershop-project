@@ -104,4 +104,19 @@ export class PrismaProvidedServicesRepository
 
     return providedServices.map(PrismaProvidedServicesMapper.toDomain)
   }
+
+  async findPopularServices(): Promise<{ service: string; amount: number }[]> {
+    const popularServices: { service: string; amount: number }[] = await this
+      .prisma.$queryRaw`
+    SELECT
+      t2.name AS service,
+      CAST(COUNT(t1.id) AS INTEGER) AS amount
+    FROM "provided_services" AS t1
+    JOIN "services" AS t2 ON t1."service_id" = t2.id
+    GROUP BY t2.name
+    ORDER BY amount DESC;
+  `
+
+    return popularServices
+  }
 }

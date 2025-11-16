@@ -128,4 +128,38 @@ export class InMemoryProvidedServicesRepository
 
     return lastMonthItems
   }
+
+  async findPopularServices(): Promise<{ service: string; amount: number }[]> {
+    const serviceNameMap = this.servicesRepository.items.reduce(
+      (acc, service) => {
+        const id = service.id.toString()
+
+        acc[id] = service.name
+
+        return acc
+      },
+      {} as Record<string, string>
+    )
+
+    const serviceCounts = this.items.reduce(
+      (acc, provided) => {
+        // Obtém o serviceId do ProvidedService
+        const serviceId = provided.serviceId.toString()
+
+        const serviceName = serviceNameMap[serviceId] ?? 'Serviço Desconhecido'
+
+        acc[serviceName] = (acc[serviceName] || 0) + 1
+
+        return acc
+      },
+      {} as Record<string, number>
+    )
+
+    return Object.entries(serviceCounts)
+      .map(([name, count]) => ({
+        service: name,
+        amount: count,
+      }))
+      .sort((a, b) => b.amount - a.amount)
+  }
 }

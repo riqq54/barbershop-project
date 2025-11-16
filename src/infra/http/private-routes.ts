@@ -13,6 +13,7 @@ import { fetchUsersController } from './controllers/fetch-users-controller.ts'
 import { getDayProvidedServicesAmountController } from './controllers/get-day-provided-services-amount-controller.ts'
 import { getMonthProvidedServicesAmountController } from './controllers/get-month-provided-services-amount-controller.ts'
 import { getMonthRevenueController } from './controllers/get-month-revenue-controller.ts'
+import { getPopularServicesController } from './controllers/get-popular-services-controller.ts'
 import { getServiceByIdController } from './controllers/get-service-by-id-controller.ts'
 import { getUserProfileController } from './controllers/get-user-profile-controller.ts'
 import { verifyJWT } from './middlewares/verify-jwt.ts'
@@ -35,4 +36,5 @@ export async function privateRoutes(app: FastifyInstance) {
   app.register(getMonthRevenueController)
   app.register(getMonthProvidedServicesAmountController)
   app.register(getDayProvidedServicesAmountController)
+  app.register(getPopularServicesController)
 }

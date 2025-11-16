@@ -6,6 +6,8 @@ async function seed() {
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
   const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
 
+  const today = now.getDate()
+
   const ID_GERENTE = 'a64df12f-a008-4e4c-9b5a-2277b41a6579'
   const ID_BARBEIRO = '0b2a7947-5936-4287-b3c2-59e845807a1c'
   const ID_CLIENTE = 'ec32ba15-6def-4c98-9c94-791aa9f269c0'
@@ -139,7 +141,7 @@ async function seed() {
 
   // SERVIÇOS PRESTADOS NO MÊS PASSADO
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 9; i < today; i++) {
     const lastMonthDay = new Date(lastMonthStart)
     lastMonthDay.setDate(lastMonthStart.getDate() + i)
 
@@ -154,7 +156,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 6; i < today; i++) {
     const lastMonthDay = new Date(lastMonthStart)
     lastMonthDay.setDate(lastMonthStart.getDate() + i)
 
@@ -169,7 +171,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 2; i < today; i++) {
     const lastMonthDay = new Date(lastMonthStart)
     lastMonthDay.setDate(lastMonthStart.getDate() + i)
 
@@ -184,7 +186,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 1; i < today; i++) {
     const lastMonthDay = new Date(lastMonthStart)
     lastMonthDay.setDate(lastMonthStart.getDate() + i)
 
@@ -199,7 +201,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 1; i < today; i++) {
     const lastMonthDay = new Date(lastMonthStart)
     lastMonthDay.setDate(lastMonthStart.getDate() + i)
 
@@ -216,7 +218,7 @@ async function seed() {
 
   // SERVIÇOS PRESTADOS NO MÊS ATUAL
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 10; i < today; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -229,9 +231,19 @@ async function seed() {
         createdAt: currentMonthDay,
       },
     })
+
+    await prisma.providedService.create({
+      data: {
+        barberId: ID_BARBEIRO,
+        clientId: ID_CLIENTE,
+        serviceId: ID_SERVICO_1,
+        valueInCents: VALOR_SERVICO_1,
+        createdAt: currentMonthDay,
+      },
+    })
   }
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 5; i < today; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -246,7 +258,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 3; i < today; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -261,7 +273,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < today; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -276,7 +288,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 5; i < today; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
