@@ -10,6 +10,7 @@ import { fetchAvailableAppointmentTimesController } from './controllers/fetch-av
 import { fetchProvidedServicesByBarberIdController } from './controllers/fetch-provided-services-by-barber-id-controller.ts'
 import { fetchServicesController } from './controllers/fetch-services-controller.ts'
 import { fetchUsersController } from './controllers/fetch-users-controller.ts'
+import { getDayProvidedServicesAmountController } from './controllers/get-day-provided-services-amount-controller.ts'
 import { getMonthProvidedServicesAmountController } from './controllers/get-month-provided-services-amount-controller.ts'
 import { getMonthRevenueController } from './controllers/get-month-revenue-controller.ts'
 import { getServiceByIdController } from './controllers/get-service-by-id-controller.ts'
@@ -33,4 +34,5 @@ export async function privateRoutes(app: FastifyInstance) {
   app.register(fetchProvidedServicesByBarberIdController)
   app.register(getMonthRevenueController)
   app.register(getMonthProvidedServicesAmountController)
+  app.register(getDayProvidedServicesAmountController)
 }
