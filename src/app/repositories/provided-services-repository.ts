@@ -16,4 +16,5 @@ export interface ProvidedServicesRepository {
   findManyOnCurrentMonth(): Promise<ProvidedService[]>
   findManyOnLastMonth(): Promise<ProvidedService[]>
   findPopularServices(): Promise<{ service: string; amount: number }[]>
+  findDailyRevenueInPeriod(): Promise<{ date: string; revenue: string }[]>
 }

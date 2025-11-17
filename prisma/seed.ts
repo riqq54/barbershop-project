@@ -218,7 +218,7 @@ async function seed() {
 
   // SERVIÇOS PRESTADOS NO MÊS ATUAL
 
-  for (let i = 10; i < today; i++) {
+  for (let i = 0; i < today; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -243,7 +243,7 @@ async function seed() {
     })
   }
 
-  for (let i = 5; i < today; i++) {
+  for (let i = 10; i < today - 5; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -258,7 +258,7 @@ async function seed() {
     })
   }
 
-  for (let i = 3; i < today; i++) {
+  for (let i = 12; i < today - 2; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -273,7 +273,7 @@ async function seed() {
     })
   }
 
-  for (let i = 0; i < today; i++) {
+  for (let i = 2; i < today - 1; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 
@@ -288,7 +288,7 @@ async function seed() {
     })
   }
 
-  for (let i = 5; i < today; i++) {
+  for (let i = 5; i < today - 3; i++) {
     const currentMonthDay = new Date(currentMonthStart)
     currentMonthDay.setDate(currentMonthStart.getDate() + i)
 

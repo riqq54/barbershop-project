@@ -119,4 +119,47 @@ export class PrismaProvidedServicesRepository
 
     return popularServices
   }
+
+  async findDailyRevenueInPeriod(): Promise<
+    { date: string; revenue: string }[]
+  > {
+    const today = new Date()
+    const sevenDaysAgo = new Date(today)
+    sevenDaysAgo.setDate(today.getDate() - 7)
+
+    sevenDaysAgo.setHours(0, 0, 0, 0)
+
+    const dailyResults = await this.prisma.$queryRaw<
+      {
+        date_only: Date
+        total_revenue_cents: number
+      }[]
+    >`
+    SELECT
+      DATE("created_at") AS date_only,
+      SUM("value_in_cents") AS total_revenue_cents
+    FROM "provided_services"
+    WHERE "created_at" >= ${sevenDaysAgo}
+    GROUP BY date_only
+    ORDER BY date_only ASC;
+  `
+
+    const formattedRevenue = dailyResults.map((row) => {
+      const date = row.date_only
+
+      const dateFormatted = date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      })
+
+      const revenueFormatted = String(row.total_revenue_cents)
+
+      return {
+        date: dateFormatted,
+        revenue: revenueFormatted,
+      }
+    })
+
+    return formattedRevenue
+  }
 }
